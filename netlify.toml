@@ -1,0 +1,30 @@
+# Suno Studio — static single-page app, no build step.
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Same-origin proxies so the browser never hits CORS when calling SunoAPI.
+# The user's API key travels in the Authorization header and is passed through untouched.
+[[redirects]]
+  from = "/suno-api/*"
+  to = "https://api.sunoapi.org/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/suno-upload/*"
+  to = "https://sunoapiorg.redpandaai.co/:splat"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
